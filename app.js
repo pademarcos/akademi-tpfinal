@@ -5,10 +5,6 @@ const usersRoute = require('./src/routes/users');
 
 //settings
 app.set('port', process.env.PORT || 3000);
-const PORT = app.get('port');
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server is running on port ${PORT}`);
-});
 
 //middleware
 app.use(express.json());

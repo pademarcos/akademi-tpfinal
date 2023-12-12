@@ -11,10 +11,16 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  role: {
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+  email: {
     type: String,
-    enum: ['admin', 'patient'],
-    default: 'patient'
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true
   }
 });
 

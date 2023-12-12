@@ -2,20 +2,46 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const User = require('../models/User'); 
+const { validationResult } = require('express-validator');
+const userValidators = require('../validators/userValidators');
 
 const usersController = {};
 
+const generateAuthToken = (user) => {
+  return jwt.sign({ userId: user._id, username: user.username, admin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
+};
+
 usersController.register = async (req, res, next) => {
   try {
+        // Validar los datos del usuario
+        userValidators.validateRegister(req);
 
-    const { username, password, role } = req.body;
+        // Verificar errores de validación
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(422).json({ errors: errors.array() });
+        }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+        const { username, password, email } = req.body;
 
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      role
+            // Verificar si el usuario ya existe
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+          return res.status(422).json({ message: 'El usuario ya se registró anteriormente' });
+        }
+
+            // Verificar si el correo electrónico ya existe
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+          return res.status(422).json({ message: 'El correo electrónico ya se registró anteriormente' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const newUser = new User({
+          username,
+          password: hashedPassword,
+          email
     });
 
     await newUser.save();
@@ -29,6 +55,14 @@ usersController.register = async (req, res, next) => {
 // Iniciar sesión y obtener token JWT
 usersController.login = async (req, res, next) => {
   try {
+        // Validar los datos del usuario
+        userValidators.validateLogin(req);
+
+        // Verificar errores de validación
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(422).json({ errors: errors.array() });
+        }
 
     const { username, password } = req.body;
 
@@ -44,7 +78,7 @@ usersController.login = async (req, res, next) => {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ userId: user._id, username: user.username, role: user.role }, 'palabrasupersecreta', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, username: user.username, admin: user.isAdmin }, 'palabrasupersecreta', { expiresIn: '1h' });
 
     res.json({ token });
   } catch (error) {
@@ -55,7 +89,17 @@ usersController.login = async (req, res, next) => {
 // Recuperar contraseña
 usersController.recoverPassword = async (req, res, next) => {
   try {
+        // Validar los datos del usuario
+        userValidators.validateRecoverPassword(req);
+
+        // Verificar errores de validación
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(422).json({ errors: errors.array() });
+        }
     const { email } = req.body;
+        // Aquí iría la lógica para enviar el correo electrónico de recuperación de contraseña
+    // Puedes usar nodemailer u otra biblioteca para esto
 
     res.json({ message: 'Se ha enviado un correo electrónico para restablecer la contraseña' });
   } catch (error) {
