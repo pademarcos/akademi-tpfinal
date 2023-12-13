@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const User = require('../models/User'); 
+const User = require('../models/user'); 
 const { validationResult } = require('express-validator');
 const userValidators = require('../validators/userValidators');
 
@@ -36,7 +36,7 @@ usersController.register = async (req, res, next) => {
           return res.status(422).json({ message: 'El correo electrónico ya se registró anteriormente' });
         }
 
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
           username,
@@ -78,8 +78,8 @@ usersController.login = async (req, res, next) => {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ userId: user._id, username: user.username, admin: user.isAdmin }, 'palabrasupersecreta', { expiresIn: '1h' });
-
+    const token = generateAuthToken(user);
+console.log(user);
     res.json({ token });
   } catch (error) {
     next(error);
@@ -98,8 +98,7 @@ usersController.recoverPassword = async (req, res, next) => {
           return res.status(422).json({ errors: errors.array() });
         }
     const { email } = req.body;
-        // Aquí iría la lógica para enviar el correo electrónico de recuperación de contraseña
-    // Puedes usar nodemailer u otra biblioteca para esto
+        //  lógica para enviar el correo electrónico de recuperación de contraseña con nodemailer
 
     res.json({ message: 'Se ha enviado un correo electrónico para restablecer la contraseña' });
   } catch (error) {
