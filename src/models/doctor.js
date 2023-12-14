@@ -7,7 +7,8 @@ const doctorSchema = new Schema({
     required: true,
   },
   speciality: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'Speciality',
     required: true,
   },
 });

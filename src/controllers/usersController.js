@@ -8,21 +8,18 @@ const userValidators = require('../validators/userValidators');
 const usersController = {};
 
 const generateAuthToken = (user) => {
-  return jwt.sign({ userId: user._id, username: user.username, admin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign({ userId: user._id, username: user.username, admin: user.isAdmin, dni: user.dni }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
 usersController.register = async (req, res, next) => {
   try {
-        // Validar los datos del usuario
         userValidators.validateRegister(req);
-
-        // Verificar errores de validación
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() });
         }
 
-        const { username, password, email } = req.body;
+        const { username, password, email, dni } = req.body;
 
             // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ username });
@@ -36,12 +33,18 @@ usersController.register = async (req, res, next) => {
           return res.status(422).json({ message: 'El correo electrónico ya se registró anteriormente' });
         }
 
+        const existingDNI = await User.findOne({ dni });
+        if (existingDNI) {
+          return res.status(422).json({ message: 'El DNI ya se registró anteriormente' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
           username,
           password: hashedPassword,
-          email
+          email,
+          dni
     });
 
     await newUser.save();
@@ -55,10 +58,7 @@ usersController.register = async (req, res, next) => {
 // Iniciar sesión y obtener token JWT
 usersController.login = async (req, res, next) => {
   try {
-        // Validar los datos del usuario
         userValidators.validateLogin(req);
-
-        // Verificar errores de validación
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() });
@@ -79,7 +79,7 @@ usersController.login = async (req, res, next) => {
     }
 
     const token = generateAuthToken(user);
-console.log(user);
+    console.log(user);
     res.json({ token });
   } catch (error) {
     next(error);
@@ -89,10 +89,7 @@ console.log(user);
 // Recuperar contraseña
 usersController.recoverPassword = async (req, res, next) => {
   try {
-        // Validar los datos del usuario
         userValidators.validateRecoverPassword(req);
-
-        // Verificar errores de validación
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.status(422).json({ errors: errors.array() });

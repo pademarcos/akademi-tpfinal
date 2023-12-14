@@ -15,6 +15,11 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  dni: {
+    type: String,
+    required: true,
+    unique: true
+  },
   email: {
     type: String,
     required: true,
