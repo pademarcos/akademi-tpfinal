@@ -4,6 +4,7 @@ const app = express();
 const usersRoute = require('./src/routes/users');
 const doctorsRoute = require('./src/routes/doctors');
 const specialitiesRoute = require('./src/routes/specialities');
+const appointmentsRoute = require('./src/routes/appointments');
 
 //settings
 app.set('port', process.env.PORT || 3000);
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/users', usersRoute);
 app.use('/api/doctors', doctorsRoute);
 app.use('/api/specialities', specialitiesRoute);
+app.use('/api/appointments', appointmentsRoute);
 
 app.use((error, req, res, next) => {
     res.status(error.code || 500);

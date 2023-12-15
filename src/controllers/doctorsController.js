@@ -1,4 +1,5 @@
 const Doctor = require('../models/doctor');
+const Speciality = require('../models/speciality');
 const { validationResult } = require('express-validator');
 const validateAddDoctor = require('../validators/doctorValidators');
 
@@ -6,7 +7,6 @@ const doctorsController = {};
 
 doctorsController.getAllDoctors = async (req, res, next) => {
   try {
-    //obtener y devolver todos los médicos
     const doctors = await Doctor.find();
     res.json(doctors);
   } catch (error) {
@@ -17,7 +17,6 @@ doctorsController.getAllDoctors = async (req, res, next) => {
 doctorsController.getDoctorDetails = async (req, res, next) => {
   try {
     const doctorId = req.params.id;
-    // obtener y devolver detalles de un médico específico
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
       return res.status(404).json({ message: 'Médico no encontrado' });
@@ -38,14 +37,47 @@ doctorsController.addDoctor = async (req, res, next) => {
 
     const { name, speciality } = req.body;
 
+    const existingSpeciality = await Speciality.findOne({ name: speciality });
+
+    if (!existingSpeciality) {
+      return res.status(404).json({ message: 'Especialidad no encontrada' });
+    }
+
     const newDoctor = new Doctor({
       name,
-      speciality,
+      speciality: existingSpeciality._id,
     });
 
     await newDoctor.save();
 
     res.status(201).json({ message: 'Médico añadido exitosamente' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+doctorsController.updateDoctor = async (req, res, next) => {
+  try {
+    const doctorId = req.params.id;
+    const { name, speciality } = req.body;
+
+    const existingSpeciality = await Speciality.findOne({ name: speciality });
+
+    if (!existingSpeciality) {
+      return res.status(404).json({ message: 'Especialidad no encontrada' });
+    }
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(
+      doctorId,
+      { name, speciality: existingSpeciality._id },
+      { new: true }
+    );
+
+    if (!updatedDoctor) {
+      return res.status(404).json({ message: 'Médico no encontrado' });
+    }
+
+    res.json({ message: 'Médico actualizado exitosamente' });
   } catch (error) {
     next(error);
   }

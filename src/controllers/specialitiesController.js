@@ -1,4 +1,6 @@
 const Speciality = require('../models/speciality');
+const { validationResult } = require('express-validator');
+
 
 const specialitiesController = {};
 
@@ -13,10 +15,13 @@ specialitiesController.getAllSpecialities = async (req, res, next) => {
 
 specialitiesController.addSpeciality = async (req, res, next) => {
   try {
-    console.log(req.body); 
+
     const { name } = req.body;
 
-    console.log(req.body);
+    const existingSpeciality = await Speciality.findOne({ name });
+    if (existingSpeciality) {
+      return res.status(422).json({ message: 'La especialidad ya existe' });
+    }
 
     const newSpeciality = new Speciality({
       name,
