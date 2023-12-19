@@ -13,8 +13,8 @@ appointmentsController.addAppointment = async (req, res, next) => {
       return res.status(422).json({ errors: errors.array() });
     }
 
-    const { doctor, date } = req.body;
-    const patient = req.user.userId; 
+    const { doctor, date, patient } = req.body;
+    //const patient = req.user.userId; 
 
     const newAppointment = new Appointment({
       doctor,

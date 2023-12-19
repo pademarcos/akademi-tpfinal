@@ -6,9 +6,21 @@ const { validationResult } = require('express-validator');
 const userValidators = require('../validators/userValidators');
 
 const usersController = {};
+//const secretKey = process.env.SECRET
+//console.log(secretKey)
 
 const generateAuthToken = (user) => {
-  return jwt.sign({ userId: user._id, username: user.username, admin: user.isAdmin, dni: user.dni }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  //console.log(user)
+  return jwt.sign(
+    {
+      userId: user._id,
+      username: user.username,
+      admin: user.isAdmin,
+      dni: user.dni,
+    },
+    "SECRET",
+    { expiresIn: '72h' }
+  );
 };
 
 usersController.register = async (req, res, next) => {
@@ -19,7 +31,7 @@ usersController.register = async (req, res, next) => {
           return res.status(422).json({ errors: errors.array() });
         }
 
-        const { username, password, email, dni } = req.body;
+        const { username, password, email, dni, isAdmin } = req.body;
 
             // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ username });
@@ -44,7 +56,8 @@ usersController.register = async (req, res, next) => {
           username,
           password: hashedPassword,
           email,
-          dni
+          dni,
+          isAdmin,
     });
 
     await newUser.save();
@@ -67,19 +80,22 @@ usersController.login = async (req, res, next) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
+    console.log(user);
 
     if (!user) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log(isPasswordValid)
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
     const token = generateAuthToken(user);
-    console.log(user);
+    console.log(token)
+
     res.json({ token });
   } catch (error) {
     next(error);
@@ -103,4 +119,40 @@ usersController.recoverPassword = async (req, res, next) => {
   }
 };
 
-module.exports = usersController;
+usersController.getAllUsers = async (req, res, next) => {
+  try {
+    // Verificar permisos de administrador
+   // verifyAdminPermissions(req, res, next);
+
+    // Obtener todos los usuarios desde la base de datos
+    const allUsers = await User.find({}, '-password'); //sin contraseña
+
+    res.json(allUsers);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const verifyAdminPermissions = (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', ''); // Obtén el token del encabezado
+  if (!token) {
+    return res.status(401).json({ message: 'Acceso no autorizado. Token no proporcionado.' });
+  }
+console.log(token)
+  try {
+    const decoded = jwt.verify(token, 'SECRET'); // Verifica el token
+    req.user = decoded; // Almacena la información del usuario en el objeto de solicitud
+
+    // Verifica si el usuario es administrador
+    const isAdmin = req.user && req.user.admin;
+    if (!isAdmin) {
+      return res.status(403).json({ message: 'Acceso no autorizado. Se requieren permisos de administrador.' });
+    }
+
+    next(); // Continúa con la ejecución si el usuario es administrador
+  } catch (error) {
+    return res.status(401).json({ message: 'Token no válido.' });
+  }
+};
+
+module.exports = {usersController, verifyAdminPermissions};

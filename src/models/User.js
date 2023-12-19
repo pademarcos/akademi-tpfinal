@@ -5,7 +5,8 @@ const userSchema = new Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
   },
   password: {
     type: String,
@@ -13,12 +14,14 @@ const userSchema = new Schema({
   },
   isAdmin: {
     type: Boolean,
-    default: false
+    default: false,
+    required: true
   },
   dni: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true
   },
   email: {
     type: String,

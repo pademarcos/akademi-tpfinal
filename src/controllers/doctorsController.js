@@ -1,7 +1,9 @@
+const { verifyAdminPermissions } = require('../controllers/usersController');
 const Doctor = require('../models/doctor');
 const Speciality = require('../models/speciality');
 const { validationResult } = require('express-validator');
 const validateAddDoctor = require('../validators/doctorValidators');
+
 
 const doctorsController = {};
 
@@ -58,6 +60,8 @@ doctorsController.addDoctor = async (req, res, next) => {
 
 doctorsController.updateDoctor = async (req, res, next) => {
   try {
+    
+    verifyAdminPermissions(req, res, next);
     const doctorId = req.params.id;
     const { name, speciality } = req.body;
 

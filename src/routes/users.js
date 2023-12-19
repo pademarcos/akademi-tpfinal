@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const usersController = require('../controllers/usersController');
+const { usersController } = require('../controllers/usersController');
 
 // Rutas relacionadas con usuarios
 
@@ -12,5 +12,7 @@ router.post('/login', usersController.login);
 
 // Recuperar contraseña
 router.post('/recover-password', usersController.recoverPassword);
+
+router.get('/all-users', usersController.getAllUsers);
 
 module.exports = router;
