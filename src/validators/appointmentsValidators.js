@@ -4,11 +4,13 @@ const moment = require('moment');
 const validateAddAppointment = () => {
   return [
     body('doctor').notEmpty().withMessage('El campo doctor es obligatorio'),
+    body('patient').optional(),
     body('date')
       .notEmpty().withMessage('El campo fecha es obligatorio')
       .custom((value) => {
         const now = moment();
         const selectedDate = moment(value);
+
 
         if (!selectedDate.isValid() || selectedDate.isBefore(now)) {
           throw new Error('La fecha seleccionada es inválida');

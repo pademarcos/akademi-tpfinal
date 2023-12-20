@@ -1,5 +1,6 @@
 const { verifyAdminPermissions } = require('../controllers/usersController');
 const Doctor = require('../models/doctor');
+const Appointment = require('../models/appointment'); 
 const Speciality = require('../models/speciality');
 const { validationResult } = require('express-validator');
 const validateAddDoctor = require('../validators/doctorValidators');
@@ -7,6 +8,37 @@ const validateAddDoctor = require('../validators/doctorValidators');
 
 const doctorsController = {};
 
+doctorsController.getDoctorWithAppointments = async (req, res, next) => {
+  try {
+    const doctorId = req.params.id;
+
+    // Buscar el médico en la base de datos
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ message: 'Médico no encontrado' });
+    }
+
+    const appointments = await Appointment.find({
+      doctor: doctorId,
+      isReserved: false,
+      date: { $gte: new Date() }, // Garantiza que la fecha sea igual o posterior a la actual
+    });
+
+    // Devolver la información del médico y sus turnos
+    res.json({
+      doctor: {
+        _id: doctor._id,
+        name: doctor.name,
+        speciality: doctor.speciality,
+      },
+      appointments: appointments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//muestra todos los doctores y sus especialidades(id) 
 doctorsController.getAllDoctors = async (req, res, next) => {
   try {
     const doctors = await Doctor.find();
@@ -16,6 +48,7 @@ doctorsController.getAllDoctors = async (req, res, next) => {
   }
 };
 
+// muestra un doctor y su especialidad
 doctorsController.getDoctorDetails = async (req, res, next) => {
   try {
     const doctorId = req.params.id;

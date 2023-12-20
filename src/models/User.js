@@ -29,7 +29,21 @@ const userSchema = new Schema({
     unique: true,
     lowercase: true,
     trim: true
-  }
+  },
+  canceledAppointments: [{
+    doctor: {
+      type: Schema.Types.ObjectId,
+      ref: 'Doctor',
+    },
+    date: {
+      type: Date,
+      required: true,
+    },
+    appointment: {
+      type: Schema.Types.ObjectId,
+      ref: 'Appointment',
+    },
+  }],
 });
 
 const User = mongoose.model('User', userSchema);

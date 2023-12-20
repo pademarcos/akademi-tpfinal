@@ -13,6 +13,6 @@ router.post('/login', usersController.login);
 // Recuperar contraseña
 router.post('/recover-password', usersController.recoverPassword);
 
-router.get('/all-users', usersController.getAllUsers);
+router.get('/all-users', usersController.getAllUsers); //solo admin
 
 module.exports = router;

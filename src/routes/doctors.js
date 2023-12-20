@@ -10,6 +10,9 @@ router.get('/', doctorsController.getAllDoctors);
 //  médico específico
 router.get('/:id', doctorsController.getDoctorDetails);
 
+// Detalle del médico con sus turnos
+router.get('/details/:id', doctorsController.getDoctorWithAppointments);
+
 // nuevo médico (admin)
 router.post('/', verifyAdminPermissions, doctorsController.addDoctor);
 

@@ -121,13 +121,23 @@ usersController.recoverPassword = async (req, res, next) => {
 
 usersController.getAllUsers = async (req, res, next) => {
   try {
-    // Verificar permisos de administrador
-   // verifyAdminPermissions(req, res, next);
-
     // Obtener todos los usuarios desde la base de datos
     const allUsers = await User.find({}, '-password'); //sin contraseña
 
     res.json(allUsers);
+  } catch (error) {
+    next(error);
+  }
+};
+
+usersController.getCanceledAppointments = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.userId).populate('canceledAppointments');
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.json(user.canceledAppointments);
   } catch (error) {
     next(error);
   }
@@ -138,7 +148,7 @@ const verifyAdminPermissions = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Acceso no autorizado. Token no proporcionado.' });
   }
-console.log(token)
+  
   try {
     const decoded = jwt.verify(token, 'SECRET'); // Verifica el token
     req.user = decoded; // Almacena la información del usuario en el objeto de solicitud
