@@ -33,13 +33,11 @@ usersController.register = async (req, res, next) => {
 
         const { username, password, email, dni, isAdmin } = req.body;
 
-            // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ username });
         if (existingUser) {
           return res.status(422).json({ message: 'El usuario ya se registró anteriormente' });
         }
 
-            // Verificar si el correo electrónico ya existe
         const existingEmail = await User.findOne({ email });
         if (existingEmail) {
           return res.status(422).json({ message: 'El correo electrónico ya se registró anteriormente' });
@@ -118,8 +116,7 @@ usersController.recoverPassword = async (req, res, next) => {
 
 usersController.getAllUsers = async (req, res, next) => {
   try {
-    // Obtener todos los usuarios desde la base de datos
-    const allUsers = await User.find({}, '-password'); //sin contraseña
+    const allUsers = await User.find({}, '-password'); 
 
     res.json(allUsers);
   } catch (error) {
@@ -129,7 +126,8 @@ usersController.getAllUsers = async (req, res, next) => {
 
 usersController.getCanceledAppointments = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.userId).populate('canceledAppointments');
+    const { userId } = req.body;
+    const user = await User.findById(userId).populate('canceledAppointments');
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -141,22 +139,21 @@ usersController.getCanceledAppointments = async (req, res, next) => {
 };
 
 const verifyAdminPermissions = (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', ''); // Obtén el token del encabezado
+  const token = req.header('Authorization').replace('Bearer ', ''); 
   if (!token) {
     return res.status(401).json({ message: 'Acceso no autorizado. Token no proporcionado.' });
   }
 
   try {
-    const decoded = jwt.verify(token, 'SECRET'); // Verifica el token
-    req.user = decoded; // Almacena la información del usuario en el objeto de solicitud
+    const decoded = jwt.verify(token, 'SECRET'); 
+    req.user = decoded; 
 
-    // Verifica si el usuario es administrador
     const isAdmin = req.user && req.user.admin;
     if (!isAdmin) {
       return res.status(403).json({ message: 'Acceso no autorizado. Se requieren permisos de administrador.' });
     }
 
-    next(); // Continúa con la ejecución si el usuario es administrador
+    next();
   } catch (error) {
     return res.status(401).json({ message: 'Token no válido.' });
   }

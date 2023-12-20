@@ -50,7 +50,6 @@ appointmentsController.updateAppointment = async (req, res, next) => {
       return res.status(404).json({ message: 'Cita no encontrada' });
     }
 
-    // Verificar si el turno está reservado
     if (appointment.isReserved) {
       return res.status(400).json({ message: 'No se puede actualizar un turno reservado' });
     }    
@@ -75,20 +74,17 @@ appointmentsController.reserveAppointment = async (req, res, next) => {
   try {
     const { appointmentId, userId } = req.body;
 
-    // Buscar la cita en la base de datos
     const appointment = await Appointment.findById(appointmentId);
     if (!appointment) {
       return res.status(404).json({ message: 'Cita no encontrada' });
     }
 
-    // Verificar si la cita ya ha sido reservada o cancelada
     if (appointment.isReserved || appointment.isCanceled) {
       return res.status(400).json({ message: 'La cita no está disponible para reserva' });
     }
 
-    // Marcar la cita como reservada y asignar el paciente
     appointment.isReserved = true;
-    appointment.patient = userId; // El ID del paciente se obtiene del body
+    appointment.patient = userId; 
 
     await appointment.save();
 
@@ -102,21 +98,17 @@ appointmentsController.cancelAppointment = async (req, res, next) => {
   try {
     const { appointmentId, userId } = req.body;
 
-    // Buscar la cita en la base de datos
     const appointment = await Appointment.findById(appointmentId).populate('doctor');
     if (!appointment) {
       return res.status(404).json({ message: 'Cita no encontrada' });
     }
 
-    // Verificar si la cita ya ha sido reservada
     if (appointment.isReserved) {
-      // Cancelar la reserva
       appointment.isReserved = false;
-      appointment.patient = null; // Eliminar el ID del paciente
+      appointment.patient = null; 
 
       await appointment.save();
 
-      // Agregar la cita cancelada al usuario
       const user = await User.findById(userId);
       user.canceledAppointments.push({
         doctor: appointment.doctor,
@@ -136,15 +128,12 @@ appointmentsController.cancelAppointment = async (req, res, next) => {
 
 appointmentsController.listAppointmentsByPatient = async (req, res, next) => {
   try {
-    // Selecciona userId del cuerpo.
     const userId =  req.body.userId;
 
-    // Verifica si userId está presente
     if (!userId) {
       return res.status(400).json({ message: 'Se requiere el userId para listar los turnos del paciente' });
     }
 
-    // Buscar todos los turnos del paciente en la base de datos
     const appointments = await Appointment.find({ patient: userId });
 
     res.json(appointments);
@@ -157,18 +146,15 @@ appointmentsController.deleteAppointment = async (req, res, next) => {
   try {
     const { appointmentId } = req.params;
 
-    // Buscar el turno en la base de datos
     const appointment = await Appointment.findById(appointmentId);
     if (!appointment) {
       return res.status(404).json({ message: 'Turno no encontrado' });
     }
 
-    // Verificar si el turno está reservado
     if (appointment.isReserved) {
       return res.status(400).json({ message: 'No se puede eliminar un turno reservado' });
     }
 
-    // Eliminar el turno de la base de datos
     await Appointment.findByIdAndDelete(appointmentId);
 
     res.json({ message: 'Turno eliminado exitosamente' });
