@@ -4,6 +4,7 @@ const appointmentsController = require('../controllers/appointmentsController');
 const appointmentsValidators = require('../validators/appointmentsValidators');
 const { verifyAdminPermissions } = require('../controllers/usersController');
 
+router.get('/listByPatient', appointmentsController.listAppointmentsByPatient);
 router.post('/add', appointmentsValidators.validateAddAppointment(), appointmentsController.addAppointment);
 router.put('/reserve/', appointmentsController.reserveAppointment);
 router.put('/cancel/', appointmentsController.cancelAppointment);

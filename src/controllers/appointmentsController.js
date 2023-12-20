@@ -134,6 +134,25 @@ appointmentsController.cancelAppointment = async (req, res, next) => {
   }
 };
 
+appointmentsController.listAppointmentsByPatient = async (req, res, next) => {
+  try {
+    // Selecciona userId del cuerpo.
+    const userId =  req.body.userId;
+
+    // Verifica si userId está presente
+    if (!userId) {
+      return res.status(400).json({ message: 'Se requiere el userId para listar los turnos del paciente' });
+    }
+
+    // Buscar todos los turnos del paciente en la base de datos
+    const appointments = await Appointment.find({ patient: userId });
+
+    res.json(appointments);
+  } catch (error) {
+    next(error);
+  }
+};
+
 appointmentsController.deleteAppointment = async (req, res, next) => {
   try {
     const { appointmentId } = req.params;

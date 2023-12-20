@@ -80,21 +80,18 @@ usersController.login = async (req, res, next) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
-    console.log(user);
 
     if (!user) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log(isPasswordValid)
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
     const token = generateAuthToken(user);
-    console.log(token)
 
     res.json({ token });
   } catch (error) {
@@ -148,7 +145,7 @@ const verifyAdminPermissions = (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Acceso no autorizado. Token no proporcionado.' });
   }
-  
+
   try {
     const decoded = jwt.verify(token, 'SECRET'); // Verifica el token
     req.user = decoded; // Almacena la información del usuario en el objeto de solicitud
