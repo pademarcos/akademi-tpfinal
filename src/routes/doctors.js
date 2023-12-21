@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const doctorsController = require('../controllers/doctorsController');
-const { verifyAdminPermissions } = require('../controllers/usersController');
+const usersController = require('../controllers/usersController');
 
 
 // todos los médicos
@@ -14,10 +14,10 @@ router.get('/:id', doctorsController.getDoctorDetails);
 router.get('/details/:id', doctorsController.getDoctorWithAppointments);
 
 // nuevo médico (admin)
-router.post('/', verifyAdminPermissions, doctorsController.addDoctor);
+router.post('/', usersController.verifyAdminPermissions, doctorsController.addDoctor);
 
 // actualizar médico (admin)
-router.put('/:id', verifyAdminPermissions, doctorsController.updateDoctor); 
+router.put('/:id', usersController.verifyAdminPermissions, doctorsController.updateDoctor); 
 
 
 

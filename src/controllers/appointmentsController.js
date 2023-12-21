@@ -8,7 +8,7 @@ const appointmentsController = {};
 
 appointmentsController.addAppointment = async (req, res, next) => {
   try {
-    appointmentsValidators.validateAddAppointment(req);
+    // appointmentsValidators.validateAddAppointment(req);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -33,13 +33,12 @@ appointmentsController.addAppointment = async (req, res, next) => {
 
 appointmentsController.updateAppointment = async (req, res, next) => {
   try {
-    verifyAdminPermissions(req, res, next);
-    
-    const { appointmentId, newDoctor, newDate } = req.body;
-
-    if (newDate) {
-      appointmentsValidators.validateAddAppointment({ date: newDate });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
+
+    const { appointmentId, newDoctor, newDate } = req.body;
 
     if (!newDoctor && !newDate) {
       return res.status(400).json({ message: 'Se requiere al menos un nuevo médico o una nueva fecha' });

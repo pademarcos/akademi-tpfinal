@@ -138,7 +138,7 @@ usersController.getCanceledAppointments = async (req, res, next) => {
   }
 };
 
-const verifyAdminPermissions = (req, res, next) => {
+usersController.verifyAdminPermissions = (req, res, next) => {
   const token = req.header('Authorization').replace('Bearer ', ''); 
   if (!token) {
     return res.status(401).json({ message: 'Acceso no autorizado. Token no proporcionado.' });
@@ -159,4 +159,4 @@ const verifyAdminPermissions = (req, res, next) => {
   }
 };
 
-module.exports = {usersController, verifyAdminPermissions};
+module.exports = usersController;
