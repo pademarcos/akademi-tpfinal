@@ -1,0 +1,65 @@
+[{
+  "_id": {
+    "$oid": "658205f2e634efc3487c3d69"
+  },
+  "username": "admin2",
+  "password": "$2b$10$TpNHZ3AP6QSnbVeFpxPaz.MVQ8TVciHXEEb.cIOwh2RGQdPYZGau.",
+  "isAdmin": true,
+  "dni": "123435678",
+  "email": "admin2@ejemplo.com",
+  "canceledAppointments": [],
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6582e26531f7a8f7f4323ace"
+  },
+  "username": "paciente",
+  "password": "$2b$10$vURLuYKl.Ji.OfT8CrQo9OUBFqJ0Ens6AhOeMYR88ZIGeJvcJKq7m",
+  "isAdmin": false,
+  "dni": "1234356789",
+  "email": "paciente@ejemplo.com",
+  "canceledAppointments": [
+    {
+      "doctor": {
+        "$oid": "6580506a34aaae3bab639769"
+      },
+      "date": {
+        "$date": "2023-12-20T17:30:00.000Z"
+      },
+      "appointment": {
+        "$oid": "6581fea8d025c24c54fd3ef2"
+      },
+      "_id": {
+        "$oid": "6582e4fa246ab8c125cd40a2"
+      }
+    },
+    {
+      "doctor": {
+        "$oid": "657c48a1e107b876eedd5d16"
+      },
+      "date": {
+        "$date": "2023-12-21T19:30:00.000Z"
+      },
+      "appointment": {
+        "$oid": "6582ed2862f24f07fcfaf819"
+      },
+      "_id": {
+        "$oid": "65849eacbdce609ecc28d5c4"
+      }
+    }
+  ],
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "6585af524c4f3788c6094715"
+  },
+  "username": "admin",
+  "password": "$2b$10$qpt27UJC9daOQLkT6D8cMeZwZF1RmZpwhisBItnr7GkWPd9MJKVDy",
+  "isAdmin": true,
+  "dni": "112222222",
+  "email": "m2ok@mok.com",
+  "canceledAppointments": [],
+  "__v": 0
+}]

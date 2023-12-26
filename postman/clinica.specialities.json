@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "657b07f92455ffe8239718c3"
+  },
+  "name": "Cardiología",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657b0866b3d80a42872de75e"
+  },
+  "name": "Dermatología",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657b115280cf5659e95954e8"
+  },
+  "name": "Oftalmología",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657b12d398a2741ba629c75c"
+  },
+  "name": "Urología",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657c49401c478adfd28e595e"
+  },
+  "name": "Pediatría",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ac574aaf1a0f89671b9be"
+  },
+  "name": "Gastroenterología",
+  "__v": 0
+}]

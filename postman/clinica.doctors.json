@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "657c48a1e107b876eedd5d16"
+  },
+  "name": "Dr. Juan Pérez oftalmologo",
+  "speciality": {
+    "$oid": "657b115280cf5659e95954e8"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "657c49661c478adfd28e5962"
+  },
+  "name": "Dr. Juan Pérez2",
+  "speciality": {
+    "$oid": "657c49401c478adfd28e595e"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6580506a34aaae3bab639769"
+  },
+  "name": "Dr. Juan Pérez cardiologo",
+  "speciality": {
+    "$oid": "657b07f92455ffe8239718c3"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6581b6c8334ff05b3a878464"
+  },
+  "name": "Dr. Juan Pérez cardioljogo2",
+  "speciality": {
+    "$oid": "657b07f92455ffe8239718c3"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6581c348334ff05b3a87847a"
+  },
+  "name": "Dr. Juan Pérez cardioljogo3",
+  "speciality": {
+    "$oid": "657b07f92455ffe8239718c3"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6582e81e403533c806e1810d"
+  },
+  "name": "Dr. Juan Pérez pediatra",
+  "speciality": {
+    "$oid": "657c49401c478adfd28e595e"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ac3deaaf1a0f89671b99f"
+  },
+  "name": "Dr. Juan Pérez Urologo",
+  "speciality": {
+    "$oid": "657b12d398a2741ba629c75c"
+  },
+  "__v": 0
+}]

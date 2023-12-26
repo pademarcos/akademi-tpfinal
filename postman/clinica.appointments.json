@@ -1,0 +1,179 @@
+[{
+  "_id": {
+    "$oid": "6581fea8d025c24c54fd3ef2"
+  },
+  "doctor": {
+    "$oid": "657c49661c478adfd28e5962"
+  },
+  "date": {
+    "$date": "2024-12-23T15:31:20.000Z"
+  },
+  "isReserved": false,
+  "__v": 0,
+  "patient": null
+},
+{
+  "_id": {
+    "$oid": "6582e22931f7a8f7f4323ac9"
+  },
+  "doctor": {
+    "$oid": "6580506a34aaae3bab639769"
+  },
+  "date": {
+    "$date": "2023-12-20T18:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6582ed2862f24f07fcfaf819"
+  },
+  "doctor": {
+    "$oid": "657c48a1e107b876eedd5d16"
+  },
+  "date": {
+    "$date": "2023-12-21T19:30:00.000Z"
+  },
+  "isReserved": true,
+  "__v": 0,
+  "patient": {
+    "$oid": "6582e26531f7a8f7f4323ace"
+  }
+},
+{
+  "_id": {
+    "$oid": "6582f3bd82913f7284ce3c8c"
+  },
+  "doctor": {
+    "$oid": "6582e81e403533c806e1810d"
+  },
+  "date": {
+    "$date": "2023-12-21T19:30:00.000Z"
+  },
+  "isReserved": true,
+  "__v": 0,
+  "patient": {
+    "$oid": "6582e26531f7a8f7f4323ace"
+  }
+},
+{
+  "_id": {
+    "$oid": "6582f3c882913f7284ce3c8e"
+  },
+  "doctor": {
+    "$oid": "6582e81e403533c806e1810d"
+  },
+  "date": {
+    "$date": "2023-12-21T20:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6582f3e282913f7284ce3c92"
+  },
+  "doctor": {
+    "$oid": "6582e81e403533c806e1810d"
+  },
+  "date": {
+    "$date": "2023-12-21T14:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65830916e9aa72f083c968ae"
+  },
+  "doctor": {
+    "$oid": "6582e81e403533c806e1810d"
+  },
+  "date": {
+    "$date": "2023-12-21T14:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "65847b367bfd4db6a84dafe7"
+  },
+  "doctor": {
+    "$oid": "6582e81e403533c806e1810d"
+  },
+  "date": {
+    "$date": "2026-12-21T14:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ac431aaf1a0f89671b9a4"
+  },
+  "doctor": {
+    "$oid": "658ac3deaaf1a0f89671b99f"
+  },
+  "date": {
+    "$date": "2024-12-25T17:30:00.000Z"
+  },
+  "isReserved": true,
+  "__v": 0,
+  "patient": {
+    "$oid": "6582e26531f7a8f7f4323ace"
+  }
+},
+{
+  "_id": {
+    "$oid": "658ac76743dcc52f05632c1e"
+  },
+  "doctor": {
+    "$oid": "658ac3deaaf1a0f89671b99f"
+  },
+  "date": {
+    "$date": "2024-12-24T17:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ac77043dcc52f05632c20"
+  },
+  "doctor": {
+    "$oid": "658ac3deaaf1a0f89671b99f"
+  },
+  "date": {
+    "$date": "2024-12-24T18:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ac77443dcc52f05632c22"
+  },
+  "doctor": {
+    "$oid": "658ac3deaaf1a0f89671b99f"
+  },
+  "date": {
+    "$date": "2024-12-24T19:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "658ac77843dcc52f05632c24"
+  },
+  "doctor": {
+    "$oid": "658ac3deaaf1a0f89671b99f"
+  },
+  "date": {
+    "$date": "2024-12-24T20:30:00.000Z"
+  },
+  "isReserved": false,
+  "__v": 0
+}]
