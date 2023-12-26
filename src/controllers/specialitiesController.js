@@ -6,8 +6,33 @@ const specialitiesController = {};
 
 specialitiesController.getAllSpecialities = async (req, res, next) => {
   try {
-    const specialities = await Speciality.find();
-    res.json(specialities);
+    const page = parseInt(req.query.page) || 1; 
+    const pageSize = parseInt(req.query.pageSize) || 10; 
+
+    const totalSpecialities = await Speciality.countDocuments();
+    const totalPages = Math.ceil(totalSpecialities / pageSize);
+    const skip = (page - 1) * pageSize;
+
+    const specialities = await Speciality.find()
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    res.json({
+      specialities: {
+        data: specialities,
+        pageInfo: {
+          total: totalSpecialities,
+          totalPages,
+          currentPage: page,
+          hasNextPage,
+          hasPreviousPage,
+        },
+      },
+    });
   } catch (error) {
     next(error);
   }

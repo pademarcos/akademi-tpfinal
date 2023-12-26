@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const app = express();
 const usersRoute = require('./src/routes/users');
@@ -7,9 +8,10 @@ const specialitiesRoute = require('./src/routes/specialities');
 const appointmentsRoute = require('./src/routes/appointments');
 
 //settings
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 
 //middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

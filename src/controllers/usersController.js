@@ -106,7 +106,6 @@ usersController.recoverPassword = async (req, res, next) => {
           return res.status(422).json({ errors: errors.array() });
         }
     const { email } = req.body;
-        //  lógica para enviar el correo electrónico de recuperación de contraseña con nodemailer
 
     res.json({ message: 'Se ha enviado un correo electrónico para restablecer la contraseña' });
   } catch (error) {
@@ -126,13 +125,39 @@ usersController.getAllUsers = async (req, res, next) => {
 
 usersController.getCanceledAppointments = async (req, res, next) => {
   try {
-    const { userId } = req.body;
-    const user = await User.findById(userId).populate('canceledAppointments');
+    const { userId } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10; 
+
+    const user = await User.findById(userId).populate({
+      path: 'canceledAppointments',
+      options: {
+        skip: (page - 1) * pageSize,
+        limit: pageSize,
+      },
+    });
+
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    res.json(user.canceledAppointments);
+    const totalCanceledAppointments = user.canceledAppointments.length;
+    const totalPages = Math.ceil(totalCanceledAppointments / pageSize);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    res.json({
+      canceledAppointments: {
+        data: user.canceledAppointments,
+        pageInfo: {
+          total: totalCanceledAppointments,
+          totalPages,
+          currentPage: page,
+          hasNextPage,
+          hasPreviousPage,
+        },
+      },
+    });
   } catch (error) {
     next(error);
   }

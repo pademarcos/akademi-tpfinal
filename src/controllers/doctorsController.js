@@ -11,17 +11,34 @@ const doctorsController = {};
 doctorsController.getDoctorWithAppointments = async (req, res, next) => {
   try {
     const doctorId = req.params.id;
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10; 
 
-    const doctor = await Doctor.findById(doctorId);
+    const doctor = await Doctor.findById(doctorId).populate('speciality');
     if (!doctor) {
       return res.status(404).json({ message: 'Médico no encontrado' });
     }
 
+    const totalAppointments = await Appointment.countDocuments({
+      doctor: doctorId,
+      isReserved: false,
+      date: { $gte: new Date() },
+    });
+
+    const totalPages = Math.ceil(totalAppointments / pageSize);
+    const skip = (page - 1) * pageSize;
+
     const appointments = await Appointment.find({
       doctor: doctorId,
       isReserved: false,
-      date: { $gte: new Date() }, 
-    });
+      date: { $gte: new Date() },
+    })
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
 
     res.json({
       doctor: {
@@ -29,7 +46,16 @@ doctorsController.getDoctorWithAppointments = async (req, res, next) => {
         name: doctor.name,
         speciality: doctor.speciality,
       },
-      appointments: appointments,
+      appointments: {
+        data: appointments,
+        pageInfo: {
+          total: totalAppointments,
+          totalPages,
+          currentPage: page,
+          hasNextPage,
+          hasPreviousPage,
+        },
+      },
     });
   } catch (error) {
     next(error);
@@ -38,8 +64,35 @@ doctorsController.getDoctorWithAppointments = async (req, res, next) => {
 
 doctorsController.getAllDoctors = async (req, res, next) => {
   try {
-    const doctors = await Doctor.find();
-    res.json(doctors);
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10; 
+
+    const skip = (page - 1) * pageSize;
+
+    const totalDoctors = await Doctor.countDocuments();
+    const totalPages = Math.ceil(totalDoctors / pageSize);
+
+    const doctors = await Doctor.find()
+      .populate('speciality')
+      .skip(skip)
+      .limit(pageSize)
+      .exec();
+
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    const response = {
+      doctors,
+      pageInfo: {
+        total: totalDoctors,
+        totalPages,
+        currentPage: page,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
+
+    res.json(response);
   } catch (error) {
     next(error);
   }
@@ -48,7 +101,7 @@ doctorsController.getAllDoctors = async (req, res, next) => {
 doctorsController.getDoctorDetails = async (req, res, next) => {
   try {
     const doctorId = req.params.id;
-    const doctor = await Doctor.findById(doctorId);
+    const doctor = await Doctor.findById(doctorId).populate('speciality');
     if (!doctor) {
       return res.status(404).json({ message: 'Médico no encontrado' });
     }
@@ -68,10 +121,15 @@ doctorsController.addDoctor = async (req, res, next) => {
 
     const { name, speciality } = req.body;
 
-    const existingSpeciality = await Speciality.findOne({ name: speciality });
+    let existingSpeciality = await Speciality.findOne({ name: speciality });
 
+    // Si no existe, crea una nueva especialidad
     if (!existingSpeciality) {
-      return res.status(404).json({ message: 'Especialidad no encontrada' });
+      existingSpeciality = new Speciality({
+        name: speciality,
+      });
+
+      await existingSpeciality.save();
     }
 
     const newDoctor = new Doctor({

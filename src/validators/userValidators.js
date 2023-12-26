@@ -1,7 +1,6 @@
 const { body } = require('express-validator');
-const User = require('../models/user');
 
-const validateRegister = (req) => {
+const validateRegister = () => {
   return [
     body('username').notEmpty().withMessage('El nombre de usuario es obligatorio'),
     body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
@@ -10,14 +9,14 @@ const validateRegister = (req) => {
   ];
 };
 
-const validateLogin = (req) => {
+const validateLogin = () => {
   return [
     body('username').notEmpty().withMessage('El nombre de usuario es obligatorio'),
     body('password').notEmpty().withMessage('La contraseña es obligatoria')
   ];
 };
 
-const validateRecoverPassword = (req) => {
+const validateRecoverPassword = () => {
   return [
     body('email').isEmail().withMessage('El correo electrónico no es válido')
   ];

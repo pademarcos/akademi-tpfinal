@@ -1,15 +1,11 @@
 const Appointment = require('../models/appointment');
 const User = require('../models/user');
 const { validationResult } = require('express-validator');
-const appointmentsValidators = require('../validators/appointmentsValidators');
-const { verifyAdminPermissions } = require('../controllers/usersController');
 
 const appointmentsController = {};
 
 appointmentsController.addAppointment = async (req, res, next) => {
   try {
-    // appointmentsValidators.validateAddAppointment(req);
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
@@ -127,15 +123,39 @@ appointmentsController.cancelAppointment = async (req, res, next) => {
 
 appointmentsController.listAppointmentsByPatient = async (req, res, next) => {
   try {
-    const userId =  req.body.userId;
+    const { userId } =  req.params;
 
     if (!userId) {
       return res.status(400).json({ message: 'Se requiere el userId para listar los turnos del paciente' });
     }
+    const page = parseInt(req.query.page) || 1; 
+    const pageSize = parseInt(req.query.pageSize) || 10; 
 
-    const appointments = await Appointment.find({ patient: userId });
+    const skip = (page - 1) * pageSize;
 
-    res.json(appointments);
+    const totalAppointments = await Appointment.countDocuments({ patient: userId });
+    const totalPages = Math.ceil(totalAppointments / pageSize);
+
+    const appointments = await Appointment.find({ patient: userId })
+    .skip(skip)
+    .limit(pageSize)
+    .exec();
+
+  const hasNextPage = page < totalPages;
+  const hasPreviousPage = page > 1;
+
+  const response = {
+    appointments,
+    pageInfo: {
+      total: totalAppointments,
+      totalPages,
+      currentPage: page,
+      hasNextPage,
+      hasPreviousPage,
+    },
+  };
+
+    res.json(response);
   } catch (error) {
     next(error);
   }
@@ -157,6 +177,46 @@ appointmentsController.deleteAppointment = async (req, res, next) => {
     await Appointment.findByIdAndDelete(appointmentId);
 
     res.json({ message: 'Turno eliminado exitosamente' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+appointmentsController.listAppointmentsByDoctor = async (req, res, next) => {
+  try {
+    const { doctorId } =  req.params;
+
+    if (!doctorId) {
+      return res.status(400).json({ message: 'Se requiere el doctorId para listar los turnos segun el doctor' });
+    }
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10; 
+
+    const skip = (page - 1) * pageSize;
+
+    const totalAppointments = await Appointment.countDocuments({ doctor: doctorId });
+    const totalPages = Math.ceil(totalAppointments / pageSize);
+
+    const appointments = await Appointment.find({ doctor: doctorId })
+    .skip(skip)
+    .limit(pageSize)
+    .exec();
+
+  const hasNextPage = page < totalPages;
+  const hasPreviousPage = page > 1;
+
+  const response = {
+    appointments,
+    pageInfo: {
+      total: totalAppointments,
+      totalPages,
+      currentPage: page,
+      hasNextPage,
+      hasPreviousPage,
+    },
+  };
+
+    res.json(response);
   } catch (error) {
     next(error);
   }
