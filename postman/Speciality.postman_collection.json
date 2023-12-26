@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "a61599b1-60cb-4379-8d79-1122dad7a005",
+		"name": "Speciality",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30702759"
+	},
+	"item": [
+		{
+			"name": "crear especialidad",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Cardiología\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/specialities",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"specialities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get speciality",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/specialities?pageSize=10&page=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"specialities"
+					],
+					"query": [
+						{
+							"key": "pageSize",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

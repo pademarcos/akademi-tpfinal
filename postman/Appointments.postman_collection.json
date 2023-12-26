@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "44d1a6ca-b22b-4cca-9ed0-77f146b0522b",
+		"name": "Appointments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30702759"
+	},
+	"item": [
+		{
+			"name": "add appointment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer token",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"doctor\": \"657c48a1e107b876eedd5d16\",\r\n  \"patient\": \"65805c3034aaae3bab639774\", \r\n  \"date\": \"2023-12-18T14:30:00\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/appointments/add\n",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"appointments",
+						"add\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reserve appointment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgxYzMwMzMzNGZmMDViM2E4Nzg0NzEiLCJ1c2VybmFtZSI6InBhY2llbnRlIiwiYWRtaW4iOmZhbHNlLCJkbmkiOiIxMjM0MzU2IiwiaWF0IjoxNzAzMDE2OTM0LCJleHAiOjE3MDMyNzYxMzR9.7JfBfoop7kGCT4Ot8Z87NMn_ABcIf4RtGxN8aSzFJkw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"appointmentId\": \"6581fea8d025c24c54fd3ef2\",\r\n  \"userId\": \"6581c303334ff05b3a878471\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/appointments/reserve/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"appointments",
+						"reserve",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cancel appointment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgxYzMwMzMzNGZmMDViM2E4Nzg0NzEiLCJ1c2VybmFtZSI6InBhY2llbnRlIiwiYWRtaW4iOmZhbHNlLCJkbmkiOiIxMjM0MzU2IiwiaWF0IjoxNzAzMDE2OTM0LCJleHAiOjE3MDMyNzYxMzR9.7JfBfoop7kGCT4Ot8Z87NMn_ABcIf4RtGxN8aSzFJkw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"appointmentId\": \"6581ef2ef1fc8a07c4b57f42\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/appointments/cancel/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"appointments",
+						"cancel",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update appointment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgyMDVmMmU2MzRlZmMzNDg3YzNkNjkiLCJ1c2VybmFtZSI6ImFkbWluMiIsImFkbWluIjp0cnVlLCJkbmkiOiIxMjM0MzU2NzgiLCJpYXQiOjE3MDMwODMxODgsImV4cCI6MTcwMzM0MjM4OH0.Cn1t0COxWHdj4Nl7DJq7tnty4iVXbLo9Xuuzg_LRoXo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"appointmentId\": \"6581fea8d025c24c54fd3ef2\",\r\n    \"newDoctor\": \"6581b6c8334ff05b3a878464\", \r\n    \"newDate\": \"2023-12-22T11:30:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/appointments/update/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"appointments",
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete appointment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/appointments/delete/6582f3d682913f7284ce3c90",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"appointments",
+						"delete",
+						"6582f3d682913f7284ce3c90"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get appointments by userId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"6582e26531f7a8f7f4323ace\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3000/api/appointments/listByPatient",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"appointments",
+						"listByPatient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get appointment by doctor",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
