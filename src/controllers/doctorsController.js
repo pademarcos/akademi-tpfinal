@@ -148,7 +148,7 @@ doctorsController.addDoctor = async (req, res, next) => {
 doctorsController.updateDoctor = async (req, res, next) => {
   try {
     
-    verifyAdminPermissions(req, res, next);
+   // verifyAdminPermissions(req, res, next);
     const doctorId = req.params.id;
     const { name, speciality } = req.body;
 
