@@ -147,20 +147,42 @@ doctorsController.addDoctor = async (req, res, next) => {
 
 doctorsController.updateDoctor = async (req, res, next) => {
   try {
-    
-   // verifyAdminPermissions(req, res, next);
     const doctorId = req.params.id;
     const { name, speciality } = req.body;
 
-    const existingSpeciality = await Speciality.findOne({ name: speciality });
+    if (!name && !speciality) {
+      return res.status(400).json({ message: 'Se requiere al menos un campo para actualizar' });
+    }
 
-    if (!existingSpeciality) {
-      return res.status(404).json({ message: 'Especialidad no encontrada' });
+    let updatedFields = {};
+
+    if (name) {
+      updatedFields.name = name;
+    }
+
+    if (speciality) {
+      let existingSpeciality;
+
+      if (typeof speciality === 'string') {
+        // Si se proporciona el nombre de la especialidad
+        existingSpeciality = await Speciality.findOne({ name: speciality });
+      } else if (typeof speciality === 'object' && speciality._id) {
+        // Si se proporciona el objeto de especialidad con el ID
+        existingSpeciality = await Speciality.findById(speciality._id);
+      } else {
+        return res.status(400).json({ message: 'Formato no válido para la especialidad' });
+      }
+
+      if (!existingSpeciality) {
+        return res.status(404).json({ message: 'Especialidad no encontrada' });
+      }
+
+      updatedFields.speciality = existingSpeciality._id;
     }
 
     const updatedDoctor = await Doctor.findByIdAndUpdate(
       doctorId,
-      { name, speciality: existingSpeciality._id },
+      updatedFields,
       { new: true }
     );
 
@@ -168,7 +190,7 @@ doctorsController.updateDoctor = async (req, res, next) => {
       return res.status(404).json({ message: 'Médico no encontrado' });
     }
 
-    res.json({ message: 'Médico actualizado exitosamente' });
+    res.json({ message: 'Médico actualizado exitosamente', updatedDoctor });
   } catch (error) {
     next(error);
   }
