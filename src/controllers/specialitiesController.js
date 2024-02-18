@@ -1,6 +1,5 @@
 const Speciality = require('../models/speciality');
-const { validationResult } = require('express-validator');
-
+//const { validationResult } = require('express-validator');
 
 const specialitiesController = {};
 

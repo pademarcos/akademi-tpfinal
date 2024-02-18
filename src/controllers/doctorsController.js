@@ -196,5 +196,24 @@ doctorsController.updateDoctor = async (req, res, next) => {
   }
 };
 
+doctorsController.getDoctorsBySpeciality = async (req, res, next) => {
+  try {
+    const specialityName = req.params.specialityName;
+
+    const speciality = await Speciality.findOne({ name: specialityName });
+    if (!speciality) {
+      return res.status(404).json({ message: 'Especialidad no encontrada' });
+    }
+
+    const doctors = await Doctor.find({ speciality: speciality._id })
+      .populate('speciality')
+      .exec();
+
+    res.json({ doctors });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 module.exports = doctorsController;

@@ -19,6 +19,8 @@ router.post('/', usersController.verifyAdminPermissions, doctorsController.addDo
 // actualizar médico (admin)
 router.put('/:id', usersController.verifyAdminPermissions, doctorsController.updateDoctor); 
 
+//doctor por especialidad
+router.get('/speciality/:specialityName', doctorsController.getDoctorsBySpeciality);
 
 
 module.exports = router;

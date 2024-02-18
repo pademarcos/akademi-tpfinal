@@ -21,6 +21,7 @@ app.use('/api/doctors', doctorsRoute);
 app.use('/api/specialities', specialitiesRoute);
 app.use('/api/appointments', appointmentsRoute);
 
+
 app.use((error, req, res, next) => {
     res.status(error.code || 500);
     res.json({ message: error.message || 'An unknown error occurred!' });

@@ -11,11 +11,10 @@ appointmentsController.addAppointment = async (req, res, next) => {
       return res.status(422).json({ errors: errors.array() });
     }
 
-    const { doctor, date, patient } = req.body;
+    const { doctor, date } = req.body;
   
     const newAppointment = new Appointment({
       doctor,
-      patient,
       date,
     });
 
@@ -67,7 +66,8 @@ appointmentsController.updateAppointment = async (req, res, next) => {
 
 appointmentsController.reserveAppointment = async (req, res, next) => {
   try {
-    const { appointmentId, userId } = req.body;
+    const { appointmentId } = req.body;
+    const userId = req.params.userId;
 
     const appointment = await Appointment.findById(appointmentId);
     if (!appointment) {

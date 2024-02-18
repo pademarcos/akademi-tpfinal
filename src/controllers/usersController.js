@@ -1,16 +1,13 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+//const nodemailer = require('nodemailer');
 const User = require('../models/user'); 
 const { validationResult } = require('express-validator');
 const userValidators = require('../validators/userValidators');
 
 const usersController = {};
-//const secretKey = process.env.SECRET
-//console.log(secretKey)
 
 const generateAuthToken = (user) => {
-  //console.log(user)
   return jwt.sign(
     {
       userId: user._id,
@@ -19,7 +16,7 @@ const generateAuthToken = (user) => {
       dni: user.dni,
     },
     "SECRET",
-    { expiresIn: '72h' }
+    { expiresIn: '1h' }
   );
 };
 
@@ -115,9 +112,32 @@ usersController.recoverPassword = async (req, res, next) => {
 
 usersController.getAllUsers = async (req, res, next) => {
   try {
-    const allUsers = await User.find({}, '-password'); 
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
 
-    res.json(allUsers);
+    const skip = (page - 1) * pageSize;
+
+    const [totalUsers, users] = await Promise.all([
+      User.countDocuments(),
+      User.find({}, '-password').skip(skip).limit(pageSize),
+    ]);
+
+    const totalPages = Math.ceil(totalUsers / pageSize);
+    const hasNextPage = page < totalPages;
+    const hasPreviousPage = page > 1;
+
+    res.json({
+      users: {
+        data: users,
+        pageInfo: {
+          total: totalUsers,
+          totalPages,
+          currentPage: page,
+          hasNextPage,
+          hasPreviousPage,
+        },
+      },
+    });
   } catch (error) {
     next(error);
   }
