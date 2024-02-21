@@ -7,8 +7,10 @@ const doctorsRoute = require('./src/routes/doctors');
 const specialitiesRoute = require('./src/routes/specialities');
 const appointmentsRoute = require('./src/routes/appointments');
 
+require('dotenv').config();
+
 //settings
-app.set('port', process.env.PORT || 3001);
+app.set('port', process.env.PORT || 3002);
 
 //middleware
 app.use(cors());
